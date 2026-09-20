@@ -1,6 +1,34 @@
+type BomItem = {
+  partNumber: string;
+  partName: string;
+  quantity: number;
+};
+
+type RoutingItem = {
+  sequence: number;
+  operation: string;
+  partNumber: string;
+};
+
+type SopItem = {
+  operation: string;
+  torque?: string;
+  machine?: string;
+  safety: string;
+};
+
+type WorkStep = {
+  sequence: number;
+  part: string;
+  quantity: number;
+  torque?: string;
+  machine?: string;
+  safety: string;
+};
+
 const targetOperation = "Bolt 체결";
 
-const bom = [
+const bom: BomItem[] = [
   {
     partNumber: "A12",
     partName: "Bearing",
@@ -13,7 +41,7 @@ const bom = [
   }
 ];
 
-const routing = [
+const routing: RoutingItem[] = [
   {
     sequence: 1,
     operation: "Bearing 장착",
@@ -26,7 +54,7 @@ const routing = [
   }
 ];
 
-const sop = [
+const sop: SopItem[] = [
   {
     operation: "Bearing 장착",
     machine: "Press P-01",
@@ -39,7 +67,7 @@ const sop = [
   }
 ];
 
-function createWorkStep(targetOperation: string) {
+function createWorkStep(targetOperation: string): WorkStep {
   const targetRouting = routing.find(
     (item) => item.operation === targetOperation
   );
