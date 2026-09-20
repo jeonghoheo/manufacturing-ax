@@ -2,6 +2,11 @@ const targetOperation = "Bolt 체결";
 
 const bom = [
   {
+    partNumber: "A12",
+    partName: "Bearing",
+    quantity: 1
+  },
+  {
     partNumber: "B20",
     partName: "Bolt",
     quantity: 4
