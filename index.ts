@@ -16,11 +16,13 @@ const bom = [
 const routing = [
   {
     sequence: 1,
-    operation: "Bearing 장착"
+    operation: "Bearing 장착",
+    partNumber: "A12"
   },
   {
     sequence: 2,
-    operation: targetOperation
+    operation: targetOperation,
+    partNumber: "B20"
   }
 ];
 
@@ -37,26 +39,39 @@ const sop = [
   }
 ];
 
-const targetRouting = routing.find(
-  (item) => item.operation === targetOperation
-);
-const targetSop = sop.find((item) => item.operation === targetOperation);
+function createWorkStep(targetOperation: string) {
+  const targetRouting = routing.find(
+    (item) => item.operation === targetOperation
+  );
 
-// Faile test case: Bolt 체결 Routing 또는 SOP가 없는 경우
-if (!targetRouting) {
-  throw new Error(` ${targetOperation} Routing을 찾을 수 없습니다.`);
+  if (!targetRouting) {
+    throw new Error(` ${targetOperation} Routing을 찾을 수 없습니다.`);
+  }
+
+  const targetPart = bom.find(
+    (item) => item.partNumber === targetRouting.partNumber
+  );
+
+  if (!targetPart) {
+    throw new Error(
+      `${targetRouting.partNumber} 부품을 BOM에서 찾을 수 없습니다.`
+    );
+  }
+
+  const targetSop = sop.find((item) => item.operation === targetOperation);
+
+  if (!targetSop) {
+    throw new Error(` ${targetOperation} SOP를 찾을 수 없습니다.`);
+  }
+
+  return {
+    sequence: targetRouting.sequence,
+    part: `${targetPart.partName} (${targetPart.partNumber})`,
+    quantity: targetPart.quantity,
+    torque: targetSop.torque,
+    safety: targetSop.safety
+  };
 }
 
-if (!targetSop) {
-  throw new Error(` ${targetOperation} SOP를 찾을 수 없습니다.`);
-}
-
-const workStep = {
-  sequence: targetRouting.sequence,
-  part: `${bom[0].partName} (${bom[0].partNumber})`,
-  quantity: bom[0].quantity,
-  torque: targetSop.torque,
-  safety: targetSop.safety
-};
-
+const workStep = createWorkStep("Bolt 체결");
 console.log("Work Step:", workStep);
