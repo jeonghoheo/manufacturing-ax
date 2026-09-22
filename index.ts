@@ -6,11 +6,13 @@ type BomItem = {
 
 type RoutingItem = {
   sequence: number;
+  operationId: string;
   operation: string;
   partNumber: string;
 };
 
 type SopItem = {
+  operationId: string;
   operation: string;
   torque?: string;
   machine?: string;
@@ -44,11 +46,13 @@ const bom: BomItem[] = [
 const routing: RoutingItem[] = [
   {
     sequence: 1,
+    operationId: "OP-001",
     operation: "Bearing 장착",
     partNumber: "A12"
   },
   {
     sequence: 2,
+    operationId: "OP-002",
     operation: targetOperation,
     partNumber: "B20"
   }
@@ -56,11 +60,13 @@ const routing: RoutingItem[] = [
 
 const sop: SopItem[] = [
   {
+    operationId: "OP-001",
     operation: "Bearing 장착",
     machine: "Press P-01",
     safety: "보안경 착용"
   },
   {
+    operationId: "OP-002",
     operation: targetOperation,
     torque: "35Nm",
     safety: "보안경 착용"
@@ -79,7 +85,7 @@ function createWorkStep(routingItem: RoutingItem): WorkStep {
   }
 
   const targetSop = sop.find(
-    (item) => item.operation === routingItem.operation
+    (item) => item.operationId === routingItem.operationId
   );
 
   if (!targetSop) {
