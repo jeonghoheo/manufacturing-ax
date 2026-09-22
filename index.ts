@@ -101,5 +101,5 @@ function createWorkStep(targetOperation: string): WorkStep {
   };
 }
 
-const workStep = createWorkStep("Bolt 체결");
+const workStep = routing.map((item) => createWorkStep(item.operation));
 console.log("Work Step:", workStep);
