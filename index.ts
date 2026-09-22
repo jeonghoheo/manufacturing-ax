@@ -21,6 +21,8 @@ type SopItem = {
 
 type WorkStep = {
   sequence: number;
+  operationId: string;
+  operation: string;
   part: string;
   quantity: number;
   torque?: string;
@@ -94,6 +96,8 @@ function createWorkStep(routingItem: RoutingItem): WorkStep {
 
   return {
     sequence: routingItem.sequence,
+    operationId: routingItem.operationId,
+    operation: routingItem.operation,
     part: `${targetPart.partName} (${targetPart.partNumber})`,
     quantity: targetPart.quantity,
     torque: targetSop.torque,
