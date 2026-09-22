@@ -67,33 +67,27 @@ const sop: SopItem[] = [
   }
 ];
 
-function createWorkStep(targetOperation: string): WorkStep {
-  const targetRouting = routing.find(
-    (item) => item.operation === targetOperation
-  );
-
-  if (!targetRouting) {
-    throw new Error(` ${targetOperation} Routing을 찾을 수 없습니다.`);
-  }
-
+function createWorkStep(routingItem: RoutingItem): WorkStep {
   const targetPart = bom.find(
-    (item) => item.partNumber === targetRouting.partNumber
+    (item) => item.partNumber === routingItem.partNumber
   );
 
   if (!targetPart) {
     throw new Error(
-      `${targetRouting.partNumber} 부품을 BOM에서 찾을 수 없습니다.`
+      `${routingItem.partNumber} 부품을 BOM에서 찾을 수 없습니다.`
     );
   }
 
-  const targetSop = sop.find((item) => item.operation === targetOperation);
+  const targetSop = sop.find(
+    (item) => item.operation === routingItem.operation
+  );
 
   if (!targetSop) {
-    throw new Error(` ${targetOperation} SOP를 찾을 수 없습니다.`);
+    throw new Error(` ${routingItem.operation} SOP를 찾을 수 없습니다.`);
   }
 
   return {
-    sequence: targetRouting.sequence,
+    sequence: routingItem.sequence,
     part: `${targetPart.partName} (${targetPart.partNumber})`,
     quantity: targetPart.quantity,
     torque: targetSop.torque,
@@ -101,5 +95,5 @@ function createWorkStep(targetOperation: string): WorkStep {
   };
 }
 
-const workStep = routing.map((item) => createWorkStep(item.operation));
+const workStep = routing.map(createWorkStep);
 console.log("Work Step:", workStep);
